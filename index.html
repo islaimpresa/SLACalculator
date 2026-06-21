@@ -495,6 +495,15 @@
     g("btnCalc").textContent=t("calc");
     g("lblFinal").textContent=t("final");
     g("btnPDF").textContent=t("pdf");
+    g("btnCopyPrice").textContent=t("copyPrice");
+    g("modeLbl").textContent=t("reverseMode");
+    g("reverseLbl").textContent=t("reverseLbl");
+    g("lblBudget").textContent=t("lblBudget");
+    g("presetLblMat").textContent=t("presetLblMat");
+    g("discountLbl").textContent=t("discountLbl");
+    g("lblMinPrints").textContent=t("lblMinPrints");
+    g("lblDiscount").textContent=t("lblDiscount");
+    g("discountMsg").textContent=t("discountMsg");
     g("footerText").textContent=t("footer");
     g("cta").innerHTML=t("cta")+'<a href="https://www.instagram.com/islaimpresa/" target="_blank" rel="noopener">Isla Impresa</a>';
     updateSyms();
@@ -536,8 +545,8 @@
     let bulkPct=Math.max(0,num("bulkPct"));
     const minPrints=Math.max(1,Math.round(num("minPrints"))||1);
     const autoPct=num("discountPct")||0;
-    if(qty>=minPrints&&autoPct>0){bulkPct=autoPct;document.getElementById("discountMsg").textContent=`✓ ${autoPct}% discount applied!`;}
-    else{document.getElementById("discountMsg").textContent=`Enter quantity ≥ ${minPrints} to apply discount`;}
+    if(qty>=minPrints&&autoPct>0){bulkPct=autoPct;document.getElementById("discountMsg").textContent=t("discountApplied").replace("{0}",autoPct);}
+    else{document.getElementById("discountMsg").textContent=t("discountMsg").replace("{0}",minPrints);}
     const bulkPct=Math.max(0,num("bulkPct"));
     const subtotal=unitPrice*qty;
     const discount=subtotal*(bulkPct/100);
@@ -736,7 +745,7 @@
     const unitPrice=lastCalc.unitPrice;
     const qty=Math.floor(budget/unitPrice);
     const total=qty*unitPrice;
-    document.getElementById("reverseResult").textContent=`${qty} ${qty===1?"print":"prints"} for ${fmt(total)} (${fmt(unitPrice)} each)`;
+    document.getElementById("reverseResult").textContent=`${qty} ${qty===1?t("reverseUnitSing"):t("reverseUnitPlur")} ${t("reverseFor")} ${fmt(total)} (${fmt(unitPrice)} ${t("reverseEach")})`;
   }
   function loadPreset(mat){
     const presets={
