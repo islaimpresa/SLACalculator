@@ -2,6 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNjQgNjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPCEtLSBCYWNrZ3JvdW5kIC0tPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iIzI0OWFhOCIgcng9IjgiLz4KICAKICA8IS0tIDNEIFByaW50ZXIvQ3ViZSBzaWxob3VldHRlIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMyLCAzMikiPgogICAgPCEtLSBDdWJlIHNoYXBlIChpc29tZXRyaWMgM0QgcHJpbnQpIC0tPgogICAgPHBhdGggZD0iTSAtMTAgLTUgTCAwIC0xMiBMIDEwIC01IEwgMCAyIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOSIvPgogICAgPHBhdGggZD0iTSAwIDIgTCAxMCAtNSBMIDEwIDggTCAwIDE1IFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuNyIvPgogICAgPHBhdGggZD0iTSAwIDIgTCAtMTAgLTUgTCAtMTAgOCBMIDAgMTUgWiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC44Ii8+CiAgPC9nPgo8L3N2Zz4K" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Resin (SLA/MSLA) 3D Printing Cost Calculator — Isla Impresa</title>
 <meta name="description" content="Free resin 3D printing cost calculator by Isla Impresa. Estimate resin, energy, consumables, labor, and machine costs, then get a suggested selling price. English/Spanish, 10 currencies, PDF quotes. Made in Ponce, Puerto Rico.">
@@ -80,6 +81,12 @@
   .social a{color:var(--accent);text-decoration:none;font-weight:600;font-size:.9rem;
     border:1px solid var(--line);padding:7px 16px;border-radius:999px;transition:.15s}
   .social a:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  @media print {
+    body { background: white; color: black; }
+    .topbar, .toolnav, .cta, .copybtn, .pdfbtn, #modeToggle, #reverseSection, button.mini, [style*="border-top"] { display: none !important; }
+    .calc { display: none; }
+    .panel { border: none; background: white; }
+  }
 </style><style>
   .lang-btn{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);
     border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;margin-left:8px;}
@@ -133,6 +140,12 @@
   }
   /* input validation */
   input[type="number"]:invalid{background-color:rgba(255,100,100,.05);border-color:var(--line)}
+  @media print {
+    body { background: white; color: black; }
+    .topbar, .toolnav, .cta, .copybtn, .pdfbtn, #modeToggle, #reverseSection, button.mini, [style*="border-top"] { display: none !important; }
+    .calc { display: none; }
+    .panel { border: none; background: white; }
+  }
 </style>
 </head>
 
@@ -144,33 +157,34 @@
       <span class="tag" id="tagline">// resin cost calculator</span>
     </div>
     <div class="topbar-actions">
-      <button class="lang-btn active" id="langEN" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="langES" onclick="setLang('es')">ES</button>
-      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+      <button class="lang-btn active" id="langEN" aria-label="English" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="langES" aria-label="Español" onclick="setLang('es')">ES</button>
+      <button class="theme-btn" aria-label="Toggle dark mode" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
     </div>
   </div>
   <div class="toolnav">
-    <a href="https://islaimpresa.github.io/" target="_blank" rel="noopener">← Isla Impresa</a>
+    <a href="https://islaimpresa.github.io/">← Isla Impresa</a>
     <span class="sep">•</span>
-    <a href="https://islaimpresa.github.io/FDMCalculator/" target="_blank" rel="noopener">FDM Calculator</a>
+    <a href="https://islaimpresa.github.io/FDMCalculator/">FDM Calculator</a>
     <span class="sep">•</span>
-    <a href="https://islaimpresa.github.io/FilamentTracker/" target="_blank" rel="noopener">Filament Tracker</a>
+    <a href="https://islaimpresa.github.io/FilamentTracker/">Filament Tracker</a>
     <span class="sep">•</span>
-    <a href="https://islaimpresa.github.io/ResinTracker/" target="_blank" rel="noopener">Resin Tracker</a>
+    <a href="https://islaimpresa.github.io/ResinTracker/">Resin Tracker</a>
   </div>
   <p class="sub"><b id="slogan">Technical Mastery. Creative Design. Made in Puerto Rico.</b><br><span id="subtext">Calculate the real cost and selling price of your resin printed parts.</span></p>
 
   <div class="preset-bar">
     <span class="lbl" id="presetLbl">Preset:</span>
     <select id="presetSelect" onchange="loadPreset()"><option value="">—</option></select>
-    <button onclick="savePreset()" id="btnSavePreset">+ Save current</button>
-    <button class="danger" onclick="deletePreset()" id="btnDelPreset">Delete</button>
+    <button  aria-label="Save current preset" onclick="savePreset()" id="btnSavePreset">+ Save current</button>
+    <button aria-label="Duplicate preset" onclick="duplicatePreset()" id="btnDupPreset">⎘ Duplicate</button>
+    <button class="danger" aria-label="Delete preset" onclick="deletePreset()" id="btnDelPreset">Delete</button>
   </div>
 
   <div class="toolbar">
-    <button onclick="save()" id="btnSave">💾 Save</button>
-    <button onclick="load()" id="btnLoad">📁 Load</button>
-    <button onclick="reset()" id="btnReset">🔄 Reset</button>
+    <button aria-label="Save settings" onclick="save()" id="btnSave">💾 Save</button>
+    <button aria-label="Load settings" onclick="load()" id="btnLoad">📁 Load</button>
+    <button aria-label="Reset all values" onclick="reset()" id="btnReset">🔄 Reset</button>
   </div>
 
   <div class="grid" id="grid">
@@ -178,7 +192,7 @@
       <div class="input-prefix"><span class="sym" id="resinSym">$</span><input id="resinLiter" type="number" step="0.01" value="35"></div>
     </div>
     <div class="field"><label id="lblCurrency">Currency</label>
-      <select id="currency" onchange="onCurrencyChange()"></select>
+      <select id="currency" title="Display currency only (no conversion)" onchange="onCurrencyChange()"></select>
     </div>
     <div class="field"><label id="lblVolume">Part volume (mL)</label><input id="volume" type="number" step="0.1" value="25" min="0"
       <div class="chips"><span class="lbl" id="vChipLbl">Quick:</span>
@@ -254,9 +268,48 @@
       <div class="bd-legend" id="bdLegend"></div>
     </div>
     <div id="batchBlock"></div>
-    <button class="copybtn" onclick="copyQuote()" id="btnCopy">📋 Copy quote text</button>
-    <button class="pdfbtn" onclick="exportPDF()" id="btnPDF">📄 Export PDF</button>
+    <button class="copybtn" aria-label="Copy quote to clipboard" onclick="copyQuote()" id="btnCopy">📋 Copy quote text</button>
+    <button class="copybtn" aria-label="Copy price" onclick="copyPrice()" id="btnCopyPrice">💰 Copy price</button>
+    <button class="pdfbtn" aria-label="Export as PDF" onclick="exportPDF()" id="btnPDF">📄 Export PDF</button>
   </div>
+
+  <div id="modeToggle" style="margin:15px 0;text-align:center;">
+    <label style="font-size:0.9rem;color:var(--muted)">
+      <input type="checkbox" id="reverseMode" onchange="toggleReverseMode()" style="margin-right:6px;">
+      <span id="modeLbl">Reverse: Budget to Quantity</span>
+    </label>
+  </div>
+
+  <div id="reverseSection" style="display:none;border:1px solid var(--line);border-radius:8px;padding:12px;margin:15px 0;background:var(--panel-2)">
+    <div style="margin-bottom:10px;font-size:0.9rem;color:var(--muted)" id="reverseLbl">How many prints can you make for this budget?</div>
+    <div class="field">
+      <label id="lblBudget">Budget</label>
+      <input id="budget" type="number" step="0.01" min="0" placeholder="100" oninput="calcReverse()">
+    </div>
+    <div class="field" style="background:var(--panel);padding:10px;border-radius:6px;margin-top:10px;">
+      <strong id="reverseResult">—</strong>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--line);margin:15px 0;padding-top:15px;">
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:10px;" id="presetLblMat">Quick presets:</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;">
+      <button onclick="loadPreset('Standard')" class="mini" style="background:rgba(76,175,80,0.1);border-color:#4caf50">Standard</button>
+      <button onclick="loadPreset('Pro')" class="mini" style="background:rgba(255,152,0,0.1);border-color:#ff9800">Pro</button>
+      <button onclick="loadPreset('Flex')" class="mini" style="background:rgba(244,67,54,0.1);border-color:#f44336">Flex</button>
+      <button onclick="loadPreset('High')" class="mini" style="background:rgba(156,39,176,0.1);border-color:#9c27b0">High</button>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--line);margin:15px 0;padding-top:15px;">
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:10px;" id="discountLbl">Bulk discount:</div>
+    <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><label id="lblMinPrints">Min prints for discount</label><input id="minPrints" type="number" step="1" min="1" placeholder="10" value="10"></div>
+      <div><label id="lblDiscount">Discount %</label><input id="discountPct" type="number" step="1" min="0" max="100" placeholder="10" value="10"></div>
+    </div>
+    <div class="field" style="background:var(--panel);padding:10px;border-radius:6px;margin-top:10px;">
+      <div style="font-size:0.9rem;color:var(--muted);" id="discountMsg">Enter quantity ≥ 10 to apply discount</div>
+    </div>
 
   <div class="cta" id="cta">Need something printed? → <a href="https://www.instagram.com/islaimpresa/" target="_blank" rel="noopener">Isla Impresa</a></div>
 
@@ -302,10 +355,10 @@
       calc:"Calculate cost", final:"Unit price (suggested)",
       pdf:"📄 Export PDF",
       qty:"Quantity", bulk:"Bulk discount (%)", round:"Round price to", quick:"Quick:",
-      presetLbl:"Preset:", savePreset:"+ Save current", delPreset:"Delete",
+      presetLbl:"Preset:", savePreset:"+ Save current", dupPreset:"⎘ Duplicate", delPreset:"Delete",
       presetName:"Name this preset (e.g. Saturn 4 + ABS-like):", presetExists:"A preset with that name was overwritten.",
       noPreset:"Select a preset to delete.", confirmDelPreset:"Delete this preset?",
-      bdTitle:"Cost breakdown", copy:"📋 Copy quote text", copied:"✓ Copied to clipboard",
+      bdTitle:"Cost breakdown", copy:"📋 Copy quote text", copied:"✓ Copied to clipboard", exported:"✓ Exported",
       unitPrice:"Unit price", batchSub:"Subtotal", batchDisc:"Bulk discount", grandTotal:"Total",
       marginNote:"margin",
       cta:'Need something printed? → ',
@@ -334,10 +387,10 @@
       calc:"Calcular costo", final:"Precio unitario (sugerido)",
       pdf:"📄 Exportar PDF",
       qty:"Cantidad", bulk:"Descuento por volumen (%)", round:"Redondear precio a", quick:"Rápido:",
-      presetLbl:"Perfil:", savePreset:"+ Guardar actual", delPreset:"Eliminar",
+      presetLbl:"Perfil:", savePreset:"+ Guardar actual", dupPreset:"⎘ Duplicar", delPreset:"Eliminar",
       presetName:"Nombra este perfil (ej. Saturn 4 + tipo ABS):", presetExists:"Se sobrescribió un perfil con ese nombre.",
       noPreset:"Selecciona un perfil para eliminar.", confirmDelPreset:"¿Eliminar este perfil?",
-      bdTitle:"Desglose de costos", copy:"📋 Copiar cotización", copied:"✓ Copiado al portapapeles",
+      bdTitle:"Desglose de costos", copy:"📋 Copiar cotización", copied:"✓ Copiado al portapapeles", exported:"✓ Exportado",
       unitPrice:"Precio unitario", batchSub:"Subtotal", batchDisc:"Descuento por volumen", grandTotal:"Total",
       marginNote:"margen",
       cta:'¿Necesitas algo impreso? → ',
@@ -386,6 +439,7 @@
     cur=CURRENCIES[parseInt(document.getElementById("currency").value,10)]||CURRENCIES[0];
     updateSyms();
     if(lastCalc)renderResult();
+    calcReverse(); // update reverse calculator if active
     persist();
   }
 
@@ -397,6 +451,7 @@
     applyLabels();
     buildCurrencyOptions();
     if(lastCalc)renderResult();
+    calcReverse(); // update reverse calculator if active
     persist();
   }
   function applyLabels(){
@@ -433,6 +488,7 @@
     g("qChipLbl").textContent=t("quick");
     g("presetLbl").textContent=t("presetLbl");
     g("btnSavePreset").textContent=t("savePreset");
+    g("btnDupPreset").textContent=t("dupPreset");
     g("btnDelPreset").textContent=t("delPreset");
     g("bdTitle").textContent=t("bdTitle");
     g("btnCopy").textContent=t("copy");
@@ -477,6 +533,11 @@
     const rawPrice=withFail+profit;
     const unitPrice=roundPrice(rawPrice);
     const qty=Math.max(1,Math.round(num("qty"))||1);
+    let bulkPct=Math.max(0,num("bulkPct"));
+    const minPrints=Math.max(1,Math.round(num("minPrints"))||1);
+    const autoPct=num("discountPct")||0;
+    if(qty>=minPrints&&autoPct>0){bulkPct=autoPct;document.getElementById("discountMsg").textContent=`✓ ${autoPct}% discount applied!`;}
+    else{document.getElementById("discountMsg").textContent=`Enter quantity ≥ ${minPrints} to apply discount`;}
     const bulkPct=Math.max(0,num("bulkPct"));
     const subtotal=unitPrice*qty;
     const discount=subtotal*(bulkPct/100);
@@ -486,6 +547,7 @@
     lastCalc={resinCost,energyCost,consumables,laborCost,extras,deprec,baseCost,withFail,profit,
       rawPrice,unitPrice,failPct,profitPct,qty,bulkPct,subtotal,discount,grandTotal,unitCost,marginPct};
     renderResult();
+    calcReverse(); // update reverse calculator if active
   }
 
   function renderResult(){
@@ -582,6 +644,14 @@
     if(!confirm(t("confirmDelPreset")))return;
     const p=getPresets();delete p[nm];setPresets(p);buildPresetOptions();
   }
+  function duplicatePreset(){
+    const nm=document.getElementById("presetSelect").value;
+    if(!nm){alert(t("noPreset"));return;}
+    const newName=prompt(t("presetName")+" (duplicate)");if(newName===null)return;
+    const n=newName.trim();if(!n)return;
+    const p=getPresets();if(!p[nm]){alert(t("noPreset"));return;}
+    p[n]=JSON.parse(JSON.stringify(p[nm]));setPresets(p);buildPresetOptions(n);
+  }
 
   // ---- Copy quote text ----
   function copyQuote(){
@@ -641,8 +711,61 @@
     y+=20;doc.setFontSize(9);doc.setTextColor(120,120,120);
     doc.text("instagram.com/islaimpresa  |  facebook.com/Islaimpresa",16,y);
     const d=new Date().toISOString().slice(0,10);
+    doc.setTextColor(200,200,200);doc.setFontSize(10);doc.text("Made with Isla Impresa",16,doc.internal.pageSize.height-8,{angle:-45,opacity:0.3});
     doc.save("IslaImpresa-resina-cotizacion-"+d+".pdf");
+    const b=document.getElementById("btnPDF");const o=b.textContent;b.textContent=t("exported");setTimeout(()=>b.textContent=o,1600);
   }
+
+  function copyPrice(){
+    if(!lastCalc){alert(t("calcFirst"));return;}
+    const price=fmt(lastCalc.grandTotal||lastCalc.unitPrice);
+    const done=()=>{const b=document.getElementById("btnCopyPrice");const o=b.textContent;b.textContent=t("copied");setTimeout(()=>b.textContent=o,1600);};
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(price).then(done,()=>fallbackCopy(price,done));
+    }else fallbackCopy(price,done);
+  }
+  function toggleReverseMode(){
+    const rev=document.getElementById("reverseMode").checked;
+    document.getElementById("reverseSection").style.display=rev?"block":"none";
+    if(rev)document.getElementById("budget").focus();
+  }
+  function calcReverse(){
+    if(!lastCalc){return;}
+    const budget=parseFloat(document.getElementById("budget").value)||0;
+    if(budget<=0){document.getElementById("reverseResult").textContent="—";return;}
+    const unitPrice=lastCalc.unitPrice;
+    const qty=Math.floor(budget/unitPrice);
+    const total=qty*unitPrice;
+    document.getElementById("reverseResult").textContent=`${qty} ${qty===1?"print":"prints"} for ${fmt(total)} (${fmt(unitPrice)} each)`;
+  }
+  function loadPreset(mat){
+    const presets={
+      Standard:{resinMl:0,costPerMl:5,energyPerHr:80,hourly:20},
+      Pro:{resinMl:0,costPerMl:6,energyPerHr:100,hourly:25},
+      Flex:{resinMl:0,costPerMl:7,energyPerHr:120,hourly:30},
+      High:{resinMl:0,costPerMl:8,energyPerHr:150,hourly:35}
+    };
+    if(!presets[mat])return;
+    const p=presets[mat];
+    Object.entries(p).forEach(([k,v])=>{const el=document.getElementById(k);if(el&&v)el.value=v;});
+    calc();
+  }
+
+  // ---- Keyboard shortcuts ----
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+      e.preventDefault();
+      save();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "l") {
+      e.preventDefault();
+      load();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "R") {
+      e.preventDefault();
+      reset();
+    }
+  });
 
   (function(){
     let data=null;
