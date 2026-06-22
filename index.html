@@ -451,16 +451,7 @@
     applyLabels();
     buildCurrencyOptions();
     if(lastCalc){
-      // Refresh discount message in new language
-      const qty=Math.max(1,Math.round(num("qty"))||1);
-      const minPrints=Math.max(1,Math.round(num("minPrints"))||1);
-      const autoPct=num("discountPct")||0;
-      if(qty>=minPrints&&autoPct>0){
-        document.getElementById("discountMsg").textContent=t("discountApplied").replace("{0}",autoPct);
-      } else {
-        document.getElementById("discountMsg").textContent=t("discountMsg").replace("{0}",minPrints);
-      }
-      renderResult();
+      calc();  // Re-run calc to update ALL dynamic content including discount message
     }
     calcReverse(); // update reverse calculator if active
     persist();
