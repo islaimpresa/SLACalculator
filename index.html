@@ -170,6 +170,8 @@
     <a href="https://islaimpresa.github.io/FilamentTracker/">Filament Tracker</a>
     <span class="sep">•</span>
     <a href="https://islaimpresa.github.io/ResinTracker/">Resin Tracker</a>
+    <span class="sep">•</span>
+    <a href="https://islaimpresa.github.io/UnitConverter/">Unit Converter</a>
   </div>
   <p class="sub"><b id="slogan">Technical Mastery. Creative Design. Made in Puerto Rico.</b><br><span id="subtext">Calculate the real cost and selling price of your resin printed parts.</span></p>
 
@@ -248,7 +250,7 @@
     <div class="field"><label id="lblBulk">Bulk discount (%)</label><input id="bulkPct" type="number" step="0.1" min="0" value="0"></div>
     <div class="field"><label id="lblRound">Round price to</label>
       <select id="rounding">
-        <option value="0">No rounding</option>
+        <option value="0" id="roundNoneOpt">No rounding</option>
         <option value="0.5">0.50</option>
         <option value="1">1</option>
         <option value="5">5</option>
@@ -370,7 +372,8 @@
       saved:"Settings saved on this device.", noSave:"Could not save in this browser.",
       nothing:"Nothing saved yet.", calcFirst:"Calculate a cost first.",
       pdfTitle:"Resin Cost Calculator - Quote", pdfPlace:"Ponce, Puerto Rico",
-      pdfSuggested:"Suggested selling price:"
+      pdfSuggested:"Suggested selling price:",
+      discountLbl:"Bulk discount:", lblMinPrints:"Min prints for discount", lblDiscount:"Discount %", roundNone:"No rounding"
     },
     es:{
       tagline:"// calculadora de costos resina",
@@ -402,7 +405,8 @@
       saved:"Configuración guardada en este dispositivo.", noSave:"No se pudo guardar en este navegador.",
       nothing:"No hay nada guardado todavía.", calcFirst:"Primero calcula un costo.",
       pdfTitle:"Calculadora de Costos Resina - Cotización", pdfPlace:"Ponce, Puerto Rico",
-      pdfSuggested:"Precio de venta sugerido:"
+      pdfSuggested:"Precio de venta sugerido:",
+      discountLbl:"Descuento por volumen:", lblMinPrints:"Mín. piezas para descuento", lblDiscount:"Descuento %", roundNone:"Sin redondeo"
     }
   };
 
@@ -452,9 +456,16 @@
     buildCurrencyOptions();
     if(lastCalc){
       calc();  // Re-run calc to update ALL dynamic content including discount message
+    } else {
+      updateDiscountMsg(); // no calc run yet - still keep the idle hint bilingual
     }
     calcReverse(); // update reverse calculator if active
     persist();
+  }
+  function updateDiscountMsg(){
+    const minPrints=Math.max(1,Math.round(num("minPrints"))||1);
+    const msg=lang==="es"?`Ingresa cantidad ≥ ${minPrints} para aplicar descuento`:`Enter quantity ≥ ${minPrints} to apply discount`;
+    document.getElementById("discountMsg").textContent=msg;
   }
   function applyLabels(){
     const g=id=>document.getElementById(id);
@@ -485,6 +496,7 @@
     g("lblQty").textContent=t("qty");
     g("lblBulk").textContent=t("bulk");
     g("lblRound").textContent=t("round");
+    g("roundNoneOpt").textContent=t("roundNone");
     g("vChipLbl").textContent=t("quick");
     g("watChipLbl").textContent=t("quick");
     g("qChipLbl").textContent=t("quick");
@@ -518,6 +530,7 @@
     r.setAttribute("data-theme",dark?"light":"dark");
     document.getElementById("themeBtn").textContent=dark?t("themeDark"):t("themeLight");
     document.getElementById("logo").src=dark?LOGO:LOGO_DARK;
+    try{localStorage.setItem("islaTheme",dark?"light":"dark");}catch(e){}
   }
 
   function roundPrice(v){
@@ -554,7 +567,6 @@
       const msg=lang==="es"?`Ingresa cantidad ≥ ${minPrints} para aplicar descuento`:`Enter quantity ≥ ${minPrints} to apply discount`;
       document.getElementById("discountMsg").textContent=msg;
     }
-    const bulkPct=Math.max(0,num("bulkPct"));
     const subtotal=unitPrice*qty;
     const discount=subtotal*(bulkPct/100);
     const grandTotal=subtotal-discount;
@@ -610,6 +622,7 @@
     const data={};ids.forEach(i=>data[i]=document.getElementById(i).value);
     data.__lang=lang; data.__cur=cur.code;
     try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){}
+    try{localStorage.setItem("islaLang",lang);}catch(e){}
   }
   function save(){persist();alert(t("saved"));}
   function load(){
@@ -783,6 +796,7 @@
     }
   });
 
+  // ---- Init: load saved state, default English ----
   (function(){
     let data=null;
     try{const raw=localStorage.getItem(STORE_KEY);if(raw)data=JSON.parse(raw);}catch(e){}
@@ -791,6 +805,11 @@
       if(data.__cur){const f=CURRENCIES.find(x=>x.code===data.__cur);if(f)cur=f;}
       if(data.__lang==="es")lang="es";
     }
+    try{const sharedLang=localStorage.getItem("islaLang");if(sharedLang==="es"||sharedLang==="en")lang=sharedLang;}catch(e){}
+    try{const sharedTheme=localStorage.getItem("islaTheme");if(sharedTheme==="light"||sharedTheme==="dark"){
+      document.documentElement.setAttribute("data-theme",sharedTheme);
+      document.getElementById("logo").src=sharedTheme==="dark"?LOGO:LOGO_DARK;
+    }}catch(e){}
     setLang(lang);
     buildPresetOptions();
   })();
