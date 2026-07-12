@@ -6,35 +6,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Resin (SLA/MSLA) 3D Printing Cost Calculator — Isla Impresa</title>
 <meta name="description" content="Free resin 3D printing cost calculator by Isla Impresa. Estimate resin, energy, consumables, labor, and machine costs, then get a suggested selling price. English/Spanish, 10 currencies, PDF quotes. Made in Ponce, Puerto Rico.">
+<link rel="canonical" href="https://islaimpresa.github.io/SLACalculator/">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://islaimpresa.github.io/SLACalculator/">
+<meta property="og:image" content="https://islaimpresa.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://islaimpresa.github.io/og.png">
+<meta name="theme-color" content="#fbfaf7">
 <meta name="keywords" content="resin 3D printing cost calculator, SLA MSLA cost, resin price calculator, Isla Impresa, Puerto Rico 3D printing">
 <meta property="og:title" content="Free Resin 3D Printing Cost Calculator — Isla Impresa">
 <meta property="og:description" content="Estimate the real cost and selling price of your resin printed parts. Free, bilingual, 10 currencies, PDF quotes.">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   :root[data-theme="light"]{
-    --bg:#f4f7f8; --panel:#ffffff; --panel-2:#eef4f5; --line:#d6e1e3;
-    --ink:#15252a; --muted:#5f7378; --accent:#249aa8; --accent-2:#1b7f8b;
-    --good:#1b7f8b; --field:#ffffff; --shadow:0 2px 14px rgba(20,60,70,.06);
+    --bg:#fbfaf7; --panel:#ffffff; --panel-2:#f3f1ec; --line:#e3e6e2;
+    --ink:#17282c; --muted:#5d6f73; --accent:#249aa8; --accent-2:#1b7f8b;
+    --good:#1b7f8b; --field:#ffffff; --brass:#b07d3c; --shadow:0 1px 2px rgba(20,40,45,.04),0 18px 40px -30px rgba(20,40,45,.25);
   }
   :root[data-theme="dark"]{
-    --bg:#0c1416; --panel:#13201f; --panel-2:#18292b; --line:#274247;
-    --ink:#e6f1f2; --muted:#86a3a8; --accent:#34b8c8; --accent-2:#5fd0dd;
-    --good:#34b8c8; --field:#0a1213; --shadow:0 2px 18px rgba(0,0,0,.35);
+    --bg:#0e1a1d; --panel:#16282d; --panel-2:#1b333a; --line:#223d44;
+    --ink:#eef4f5; --muted:#90a8ad; --accent:#34b8c8; --accent-2:#2b98a4;
+    --good:#34b8c8; --field:#0a1213; --brass:#d9a566; --shadow:0 1px 0 rgba(255,255,255,.02),0 18px 40px -28px rgba(0,0,0,.7);
   }
+  :root{--display:"Fraunces",Georgia,serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    font-family:var(--body);
     line-height:1.5;padding:24px;transition:background .25s,color .25s}
   .wrap{max-width:860px;margin:0 auto}
   .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:14px}
   .brand img{height:32px;width:auto;display:block}
-  .brand .tag{color:var(--muted);font-family:ui-monospace,Consolas,monospace;font-size:.78rem}
+  .brand .tag{color:var(--muted);font-family:var(--mono);font-size:.78rem}
   .theme-btn{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);
     border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.85rem;transition:.15s}
   .theme-btn:hover{border-color:var(--accent);color:var(--accent)}
   .sub{color:var(--muted);margin:0 0 20px;font-size:.92rem}
-  .sub b{color:var(--accent);font-weight:600}
+  .sub b{color:var(--accent);font-weight:600;font-family:var(--display);font-size:1.02rem;letter-spacing:.1px}
   .toolbar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
   .toolbar button{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);
     border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem;transition:.15s}
@@ -45,13 +58,13 @@
   .field label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;
     text-transform:uppercase;letter-spacing:.04em}
   .field input,.field select{width:100%;background:var(--field);border:1px solid var(--line);
-    color:var(--ink);border-radius:7px;padding:9px 10px;font-size:1rem;font-family:ui-monospace,Consolas,monospace}
+    color:var(--ink);border-radius:7px;padding:9px 10px;font-size:1rem;font-family:var(--mono)}
   .field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
   .input-prefix{display:flex;align-items:center;background:var(--field);border:1px solid var(--line);
     border-radius:7px;overflow:hidden}
   .input-prefix:focus-within{border-color:var(--accent)}
   .input-prefix .sym{padding:9px 4px 9px 10px;color:var(--muted);font-size:1rem;
-    font-family:ui-monospace,Consolas,monospace;white-space:nowrap}
+    font-family:var(--mono);white-space:nowrap}
   .input-prefix input{border:none;border-radius:0;background:transparent;padding-left:4px}
   .input-prefix input:focus{border:none}
   .time-row{display:flex;gap:8px}
@@ -67,15 +80,26 @@
   .total{display:flex;justify-content:space-between;align-items:baseline;
     border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
   .total span{color:var(--muted);text-transform:uppercase;font-size:.8rem;letter-spacing:.05em}
-  .total b{font-size:2rem;color:var(--accent);font-family:ui-monospace,Consolas,monospace}
+  .total b{font-size:2rem;color:var(--accent);font-family:var(--mono)}
   .lines{display:grid;gap:7px;font-size:.9rem}
   .lines .row{display:flex;justify-content:space-between;color:var(--muted)}
-  .lines .row b{color:var(--ink);font-family:ui-monospace,Consolas,monospace;font-weight:500}
+  .lines .row b{color:var(--ink);font-family:var(--mono);font-weight:500}
   .lines .row.sub{padding-top:8px;border-top:1px dashed var(--line);margin-top:5px}
   .lines .row.sub b{color:var(--good)}
   .pdfbtn{margin-top:16px;width:100%;background:var(--panel-2);color:var(--ink);
     border:1px solid var(--line);border-radius:9px;padding:11px;cursor:pointer;font-size:.92rem;transition:.15s}
   .pdfbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .signup{border-top:1px solid var(--line);max-width:520px;margin:26px auto 0;padding:24px 0 6px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+  .signup h3{font-family:var(--display);font-weight:600;font-size:1.2rem;color:var(--ink);margin:0}
+  .signup .s-sub{color:var(--muted);font-size:.9rem;margin:0;max-width:400px}
+  .signup form{display:flex;gap:8px;width:100%;max-width:420px;margin-top:4px}
+  .signup input[type=email]{flex:1;font-family:var(--body);font-size:.95rem;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);transition:border-color .2s}
+  .signup input[type=email]:focus{outline:none;border-color:var(--accent)}
+  .signup .s-btn{font-family:var(--body);font-weight:600;font-size:.95rem;padding:11px 18px;border:none;border-radius:10px;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;transition:.15s}
+  .signup .s-btn:hover{background:var(--accent-2)}
+  .signup .s-micro{color:var(--muted);font-family:var(--mono);font-size:.72rem;margin:0}
+  .signup .s-thanks{color:var(--accent);font-weight:600;font-size:.92rem;margin:0}
+  @media(max-width:520px){.signup form{flex-direction:column}}
   footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.8rem}
   .social{display:flex;gap:14px;justify-content:center;margin-bottom:10px}
   .social a{color:var(--accent);text-decoration:none;font-weight:600;font-size:.9rem;
@@ -110,11 +134,11 @@
   .preset-bar button.danger:hover{border-color:#c0392b;color:#c0392b}
   .batch-line{display:flex;justify-content:space-between;align-items:center;margin-top:6px;
     padding-top:10px;border-top:1px dashed var(--line);font-size:.95rem;color:var(--muted)}
-  .batch-line b{color:var(--ink);font-family:ui-monospace,Consolas,monospace}
+  .batch-line b{color:var(--ink);font-family:var(--mono)}
   .grand{display:flex;justify-content:space-between;align-items:center;margin-top:10px;
     padding:12px 0 2px;border-top:2px solid var(--accent)}
   .grand span{font-weight:600;color:var(--ink)}
-  .grand b{font-size:1.5rem;color:var(--accent);font-family:ui-monospace,Consolas,monospace}
+  .grand b{font-size:1.5rem;color:var(--accent);font-family:var(--mono)}
   .bd-wrap{margin:14px 0 4px}
   .bd-title{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
   .bd-bar{display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
@@ -316,6 +340,19 @@
   <div class="cta" id="cta">Need something printed? → <a href="https://www.instagram.com/islaimpresa/" target="_blank" rel="noopener">Isla Impresa</a></div>
 
   <footer>
+    <div class="signup">
+      <h3 id="signupTitle">Get the next tool first.</h3>
+      <p class="s-sub" id="signupSub">New free tools and real upgrades — never small fixes.</p>
+      <form id="signupForm" action="https://assets.mailerlite.com/jsonp/2505151/forms/192806071283222430/subscribe" method="post" target="ml-sink" onsubmit="signupThanks()">
+        <input type="email" id="signupEmail" name="fields[email]" required placeholder="your@email.com" aria-label="Email">
+        <input type="hidden" name="ml-submit" value="1">
+        <input type="hidden" name="anticsrf" value="true">
+        <button type="submit" class="s-btn" id="signupBtn">Notify me</button>
+      </form>
+      <p class="s-micro" id="signupMicro">No spam. Unsubscribe anytime.</p>
+      <p class="s-thanks" id="signupThanksMsg" hidden>You're in — we'll only reach out when it's worth it.</p>
+    </div>
+    <iframe name="ml-sink" style="display:none" aria-hidden="true"></iframe>
     <div class="social">
       <a href="https://www.instagram.com/islaimpresa/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.facebook.com/Islaimpresa/" target="_blank" rel="noopener">Facebook</a>
@@ -344,7 +381,7 @@
   const T={
     en:{
       tagline:"// resin cost calculator",
-      slogan:"Technical Mastery. Creative Design. Made in Puerto Rico.",
+      slogan:"Technical Mastery. Creative Design. Made in Puerto Rico.", signupTitle:"Get the next tool first.", signupSub:"New free tools and real upgrades — never small fixes.", signupBtn:"Notify me", signupMicro:"No spam. Unsubscribe anytime.", signupThanks:"You're in — we'll only reach out when it's worth it.", signupPh:"your@email.com",
       subtext:"Calculate the real cost and selling price of your resin printed parts.",
       save:"💾 Save", load:"📁 Load", reset:"🔄 Reset",
       resinPrice:"Resin price (per liter)", currency:"Currency", volume:"Part volume (mL)",
@@ -378,7 +415,7 @@
     },
     es:{
       tagline:"// calculadora de costos resina",
-      slogan:"Maestría Técnica. Diseño Creativo. Hecho en Puerto Rico.",
+      slogan:"Maestría Técnica. Diseño Creativo. Hecho en Puerto Rico.", signupTitle:"Recibe la próxima herramienta primero.", signupSub:"Herramientas gratis y mejoras reales — nunca arreglos pequeños.", signupBtn:"Avísame", signupMicro:"Sin spam. Cancela cuando quieras.", signupThanks:"Listo — solo te escribiremos cuando valga la pena.", signupPh:"tu@email.com",
       subtext:"Calcula el costo real y el precio de venta de tus piezas en resina.",
       save:"💾 Guardar", load:"📁 Cargar", reset:"🔄 Reset",
       resinPrice:"Precio de la resina (por litro)", currency:"Moneda", volume:"Volumen de la pieza (mL)",
@@ -469,10 +506,17 @@
     const msg=lang==="es"?`Ingresa cantidad ≥ ${minPrints} para aplicar descuento`:`Enter quantity ≥ ${minPrints} to apply discount`;
     document.getElementById("discountMsg").textContent=msg;
   }
+  function signupThanks(){var f=document.getElementById("signupForm");f.style.display="none";var m=document.querySelector(".signup .s-micro");if(m)m.style.display="none";document.getElementById("signupThanksMsg").hidden=false;}
   function applyLabels(){
     const g=id=>document.getElementById(id);
     g("tagline").textContent=t("tagline");
     g("slogan").textContent=t("slogan");
+    g("signupTitle").textContent=t("signupTitle");
+    g("signupSub").textContent=t("signupSub");
+    g("signupBtn").textContent=t("signupBtn");
+    g("signupMicro").textContent=t("signupMicro");
+    g("signupThanksMsg").textContent=t("signupThanks");
+    g("signupEmail").placeholder=t("signupPh");
     g("subtext").textContent=t("subtext");
     g("btnSave").textContent=t("save");
     g("btnLoad").textContent=t("load");
@@ -534,6 +578,7 @@
     const r=document.documentElement;
     const dark=r.getAttribute("data-theme")==="dark";
     r.setAttribute("data-theme",dark?"light":"dark");
+    var _tc=document.querySelector('meta[name=theme-color]');if(_tc)_tc.setAttribute("content",dark?"#fbfaf7":"#0e1a1d");
     document.getElementById("themeBtn").textContent=dark?t("themeDark"):t("themeLight");
     document.getElementById("logo").src=dark?LOGO:LOGO_DARK;
     try{localStorage.setItem("islaTheme",dark?"light":"dark");}catch(e){}
@@ -814,6 +859,7 @@
     try{const sharedLang=localStorage.getItem("islaLang");if(sharedLang==="es"||sharedLang==="en")lang=sharedLang;}catch(e){}
     try{const sharedTheme=localStorage.getItem("islaTheme");if(sharedTheme==="light"||sharedTheme==="dark"){
       document.documentElement.setAttribute("data-theme",sharedTheme);
+      var _tc2=document.querySelector('meta[name=theme-color]');if(_tc2)_tc2.setAttribute("content",sharedTheme==="dark"?"#0e1a1d":"#fbfaf7");
       document.getElementById("logo").src=sharedTheme==="dark"?LOGO:LOGO_DARK;
     }}catch(e){}
     setLang(lang);
