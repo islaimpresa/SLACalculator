@@ -887,7 +887,7 @@
     try{const sharedTheme=localStorage.getItem("islaTheme");if(sharedTheme==="light"||sharedTheme==="dark"){
       document.documentElement.setAttribute("data-theme",sharedTheme);
       var _tc2=document.querySelector('meta[name=theme-color]');if(_tc2)_tc2.setAttribute("content",sharedTheme==="dark"?"#0e1a1d":"#fbfaf7");
-      document.getElementById("logo").src=sharedTheme==="dark"?LOGO:LOGO_DARK;
+      document.getElementById("logo").src=sharedTheme==="dark"?LOGO_DARK:LOGO;
     }}catch(e){}
     setLang(lang);
     buildPresetOptions();
